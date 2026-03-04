@@ -1,0 +1,29 @@
+DANH SÁCH TÍNH NĂNG DỰ KIẾN PHÁT TRIỂN (GOING TO DO)
+
+1. Tích hợp AQI (Chỉ số chất lượng không khí) 🌫️
+- Chi tiết: Hiển thị chỉ số AQI kèm theo lời khuyên (ví dụ: "Nên đeo khẩu trang N95", "Hạn chế tập thể dục ngoài trời").
+- Lợi ích: Giúp người dùng quyết định ra ngoài dựa trên sức khỏe + thời tiết.
+
+2. Gợi ý trang phục (Smart Outfit Suggestions) 👕
+- Chi tiết: Dựa vào nhiệt độ/độ ẩm để gợi ý: "Mặc áo khoác dày", "Áo thun mỏng", "Mang theo ô/áo chống nắng".
+- Lợi ích: Chuyển đổi con số khô khan thành lời khuyên thực tế hằng ngày.
+
+3. Cảnh báo mưa tức thời (Rain Radar/Nowcasting) ⚡
+- Chi tiết: Thêm dòng trạng thái: "Có khả năng mưa trút xuống trong 30-60 phút tới tại vị trí của bạn".
+- Lợi ích: Giúp người dùng kịp phản ứng nhanh (rút quần áo, đợi tạnh rồi mới đi).
+
+4. Đồng bộ Google Calendar (Auto Sync) 📅
+- Chi tiết: Kết nối trực tiếp tài khoản Google để tự động lấy các sự kiện có gắn địa điểm.
+- Lợi ích: Luôn cập nhật lịch trình mới nhất mà không cần nhập file manual.
+
+5. Lưu địa điểm yêu thích (Favorite Places) 📍
+- Chi tiết: Cho phép lưu nhanh "Nhà riêng", "Công ty", "Trường học"...
+- Lợi ích: Một chạm là xem ngay thời tiết và phân tích cho nơi hay đến.
+
+6. Giao diện động theo thời tiết (Dynamic Backgrounds) ✨
+- Chi tiết: Nền ứng dụng thay đổi theo trạng thái (mưa thì có nước chảy, nắng thì mây trôi, sấm sét có chớp nhẹ).
+- Lợi ích: Tăng trải nghiệm Premium, sống động.
+
+7. Thời gian di chuyển & Giao thông (Travel Time) 🚗
+- Chi tiết: Dự báo thời gian đi đến điểm hẹn dựa vào thời tiết/giao thông thực tế.
+- Lợi ích: Nhắc "Nên đi sớm" nếu trời sắp mưa to gây kẹt xe.

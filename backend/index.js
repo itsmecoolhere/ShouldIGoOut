@@ -139,6 +139,29 @@ app.get('/api/weather', async (req, res) => {
     }
 });
 
+// api chất lượng không khí (open-meteo, free)
+app.get('/api/air-quality', async (req, res) => {
+    const { lat, lon } = req.query;
+    if (!lat || !lon) return res.status(400).json({ error: 'Missing lat/lon' });
+
+    try {
+        const response = await axios.get('https://air-quality-api.open-meteo.com/v1/air-quality', {
+            params: {
+                latitude: lat,
+                longitude: lon,
+                current: 'us_aqi,pm10,pm2_5',
+                hourly: 'us_aqi,pm2_5,pm10',
+                timezone: 'auto',
+                forecast_days: 1
+            }
+        });
+        res.json(response.data);
+    } catch (error) {
+        console.error('AQI error:', error.message);
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // api gợi ý tìm kiếm (openmap)
 app.get('/api/autocomplete', async (req, res) => {
     const { text, lat, lon } = req.query;

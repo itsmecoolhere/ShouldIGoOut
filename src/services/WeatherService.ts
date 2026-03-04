@@ -27,6 +27,45 @@ export interface GoOutAnalysis {
     comfortScore: number;
 }
 
+export interface AirQualityData {
+    aqi: number;
+    pm25: number;
+    pm10: number;
+    hourly: { time: string[]; aqi: number[]; pm25: number[]; pm10: number[] };
+}
+
+// phân loại aqi theo chuẩn mỹ
+export const getAqiInfo = (aqi: number): { level: string; color: string; advice: string; className: string } => {
+    if (aqi <= 50) return { level: 'Tốt', color: '#22c55e', advice: 'Không khí trong lành', className: 'aqi-good' };
+    if (aqi <= 100) return { level: 'TB', color: '#eab308', advice: 'Chấp nhận được', className: 'aqi-moderate' };
+    if (aqi <= 150) return { level: 'Kém', color: '#f97316', advice: 'Nhóm nhạy cảm nên hạn chế', className: 'aqi-unhealthy-sg' };
+    if (aqi <= 200) return { level: 'Xấu', color: '#ef4444', advice: 'Nên đeo khẩu trang', className: 'aqi-unhealthy' };
+    if (aqi <= 300) return { level: 'Rất xấu', color: '#a855f7', advice: 'Hạn chế ra ngoài, đeo N95', className: 'aqi-very-unhealthy' };
+    return { level: 'Nguy hại', color: '#991b1b', advice: 'Không nên ra ngoài', className: 'aqi-hazardous' };
+};
+
+export const getAirQuality = async (lat: number, lon: number): Promise<AirQualityData | null> => {
+    try {
+        const res = await fetch(`http://localhost:5000/api/air-quality?lat=${lat}&lon=${lon}`);
+        const data = await res.json();
+        if (data.error) return null;
+        return {
+            aqi: data.current?.us_aqi ?? 0,
+            pm25: data.current?.pm2_5 ?? 0,
+            pm10: data.current?.pm10 ?? 0,
+            hourly: {
+                time: data.hourly?.time || [],
+                aqi: data.hourly?.us_aqi || [],
+                pm25: data.hourly?.pm2_5 || [],
+                pm10: data.hourly?.pm10 || [],
+            }
+        };
+    } catch (error) {
+        console.error("AQI fetch error:", error);
+        return null;
+    }
+};
+
 const BACKEND_URL = "http://localhost:5000/api/weather";
 
 // map wmo code (open-meteo) sang text kiểu openweather

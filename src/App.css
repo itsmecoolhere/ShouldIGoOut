@@ -468,6 +468,327 @@
   }
 }
 
+/* === hiệu ứng thời tiết động === */
+.weather-fx {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 14px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* --- mưa --- */
+.rain-container {
+  position: absolute;
+  inset: 0;
+}
+
+.raindrop {
+  position: absolute;
+  top: -20px;
+  width: 2px;
+  height: 18px;
+  background: linear-gradient(to bottom, transparent, rgba(150, 200, 255, 0.6));
+  border-radius: 0 0 2px 2px;
+  animation: rainFall linear infinite;
+}
+
+.raindrop.heavy {
+  width: 2.5px;
+  height: 24px;
+  background: linear-gradient(to bottom, transparent, rgba(150, 200, 255, 0.8));
+}
+
+@keyframes rainFall {
+  0% {
+    transform: translateY(-20px);
+  }
+
+  100% {
+    transform: translateY(calc(100vh));
+  }
+}
+
+/* --- sấm chớp --- */
+.lightning-layer {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0);
+  animation: lightningFlash 4s ease-in-out infinite;
+  z-index: 1;
+}
+
+@keyframes lightningFlash {
+
+  0%,
+  100% {
+    background: rgba(255, 255, 255, 0);
+  }
+
+  4% {
+    background: rgba(200, 220, 255, 0.25);
+  }
+
+  5% {
+    background: rgba(255, 255, 255, 0);
+  }
+
+  6% {
+    background: rgba(200, 220, 255, 0.15);
+  }
+
+  7% {
+    background: rgba(255, 255, 255, 0);
+  }
+
+  45% {
+    background: rgba(255, 255, 255, 0);
+  }
+
+  46% {
+    background: rgba(200, 220, 255, 0.3);
+  }
+
+  47% {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  48% {
+    background: rgba(200, 220, 255, 0.2);
+  }
+
+  49% {
+    background: rgba(255, 255, 255, 0);
+  }
+}
+
+/* --- mây trôi --- */
+.clouds-container {
+  position: absolute;
+  inset: 0;
+}
+
+.cloud {
+  position: absolute;
+  background: radial-gradient(ellipse, rgba(180, 180, 200, 0.12) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.cloud-1 {
+  width: 200px;
+  height: 80px;
+  top: 10%;
+  left: -60px;
+  animation: cloudFloat 18s linear infinite;
+}
+
+.cloud-2 {
+  width: 160px;
+  height: 60px;
+  top: 35%;
+  left: -40px;
+  animation: cloudFloat 25s linear infinite;
+  animation-delay: -8s;
+  opacity: 0.7;
+}
+
+.cloud-3 {
+  width: 240px;
+  height: 90px;
+  top: 55%;
+  left: -80px;
+  animation: cloudFloat 22s linear infinite;
+  animation-delay: -14s;
+  opacity: 0.5;
+}
+
+@keyframes cloudFloat {
+  0% {
+    transform: translateX(-100px);
+  }
+
+  100% {
+    transform: translateX(calc(100% + 300px));
+  }
+}
+
+/* --- nắng --- */
+.sun-container {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sun-glow {
+  position: absolute;
+  top: -20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(circle, rgba(255, 200, 50, 0.15) 0%, rgba(255, 150, 0, 0.05) 50%, transparent 70%);
+  border-radius: 50%;
+  animation: sunPulse 4s ease-in-out infinite;
+}
+
+.sun-rays {
+  position: absolute;
+  top: -10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  height: 300px;
+  background: conic-gradient(from 0deg,
+      transparent 0deg,
+      rgba(255, 200, 50, 0.04) 10deg,
+      transparent 20deg,
+      transparent 30deg,
+      rgba(255, 200, 50, 0.04) 40deg,
+      transparent 50deg,
+      transparent 60deg,
+      rgba(255, 200, 50, 0.04) 70deg,
+      transparent 80deg,
+      transparent 90deg,
+      rgba(255, 200, 50, 0.04) 100deg,
+      transparent 110deg,
+      transparent 120deg,
+      rgba(255, 200, 50, 0.04) 130deg,
+      transparent 140deg,
+      transparent 150deg,
+      rgba(255, 200, 50, 0.04) 160deg,
+      transparent 170deg,
+      transparent 180deg);
+  border-radius: 50%;
+  animation: sunRaysSpin 30s linear infinite;
+}
+
+@keyframes sunPulse {
+
+  0%,
+  100% {
+    opacity: 0.8;
+    transform: translateX(-50%) scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.15);
+  }
+}
+
+@keyframes sunRaysSpin {
+  0% {
+    transform: translateX(-50%) rotate(0deg);
+  }
+
+  100% {
+    transform: translateX(-50%) rotate(360deg);
+  }
+}
+
+/* --- sương mù --- */
+.fog-container {
+  position: absolute;
+  inset: 0;
+  filter: blur(30px);
+}
+
+.fog-layer {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(200, 200, 210, 0.13) 0%, transparent 70%);
+}
+
+.fog-1 {
+  width: 120%;
+  height: 60%;
+  top: -10%;
+  left: -10%;
+  animation: fogFloat1 10s ease-in-out infinite;
+}
+
+.fog-2 {
+  width: 100%;
+  height: 50%;
+  bottom: -5%;
+  right: -15%;
+  animation: fogFloat2 14s ease-in-out infinite;
+  opacity: 0.8;
+}
+
+.fog-3 {
+  width: 80%;
+  height: 45%;
+  top: 30%;
+  left: 10%;
+  animation: fogFloat3 12s ease-in-out infinite;
+  opacity: 0.6;
+}
+
+@keyframes fogFloat1 {
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate(15px, 8px) scale(1.05);
+  }
+}
+
+@keyframes fogFloat2 {
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate(-12px, -6px) scale(1.08);
+  }
+}
+
+@keyframes fogFloat3 {
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.6;
+  }
+
+  50% {
+    transform: translate(10px, -10px) scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+/* --- tint bg theo loại thời tiết --- */
+.weather-rain .rain-container::after,
+.weather-drizzle .rain-container::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(30, 60, 100, 0.1) 0%, rgba(20, 40, 80, 0.15) 100%);
+}
+
+.weather-thunderstorm::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(20, 15, 40, 0.2) 0%, rgba(30, 20, 50, 0.25) 100%);
+}
+
+.weather-clear::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(80, 60, 10, 0.05) 0%, rgba(60, 40, 5, 0.08) 100%);
+}
+
 /* bọc nội dung hiệu ứng */
 .hero-animated-content {
   display: flex;
@@ -615,6 +936,56 @@
   font-size: 12px;
   color: #a3a3a3;
   line-height: 1.4;
+}
+
+/* chỉ số aqi */
+.aqi-chip {
+  position: relative;
+  gap: 6px !important;
+}
+
+.aqi-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  animation: aqiPulse 2s ease-in-out infinite;
+}
+
+@keyframes aqiPulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.aqi-good {
+  border-color: rgba(34, 197, 94, 0.3) !important;
+}
+
+.aqi-moderate {
+  border-color: rgba(234, 179, 8, 0.3) !important;
+}
+
+.aqi-unhealthy-sg {
+  border-color: rgba(249, 115, 22, 0.3) !important;
+}
+
+.aqi-unhealthy {
+  border-color: rgba(239, 68, 68, 0.3) !important;
+}
+
+.aqi-very-unhealthy {
+  border-color: rgba(168, 85, 247, 0.3) !important;
+}
+
+.aqi-hazardous {
+  border-color: rgba(153, 27, 27, 0.3) !important;
 }
 
 /* thanh mức thoải mái */

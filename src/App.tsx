@@ -8,8 +8,8 @@ import {
   eachDayOfInterval, isSameMonth, isSameDay, addMonths, subMonths, isToday
 } from 'date-fns';
 import { vi } from 'date-fns/locale';
-import { analyzeGoOut, analyzeGoOutDual, getWeatherData, getWeatherDataByCoords, getCachedWeatherData } from './services/WeatherService';
-import type { WeatherData, WeatherForecast } from './services/WeatherService';
+import { analyzeGoOut, analyzeGoOutDual, getWeatherData, getWeatherDataByCoords, getCachedWeatherData, getAirQuality, getAqiInfo } from './services/WeatherService';
+import type { WeatherData, WeatherForecast, AirQualityData } from './services/WeatherService';
 import { getStoredSchedule, addEvent, removeEvent, addEventsBulk, clearSchedule, clearEventsForDay } from './services/ScheduleService';
 import type { Event } from './services/ScheduleService';
 import ICAL from 'ical.js';
@@ -51,6 +51,7 @@ export default function App() {
     cache: JSON.parse(localStorage.getItem('weather_ai_cache') || '{}'),
     activeDate: null
   });
+  const [airQuality, setAirQuality] = useState<AirQualityData | null>(null);
 
 
   const activeHourlyRef = useRef<HTMLDivElement>(null);
@@ -242,6 +243,8 @@ export default function App() {
             setWeather(data);
             setCity(data.city);
             setLoading(false);
+            // fetch aqi theo tọa độ
+            getAirQuality(latitude, longitude).then(aq => setAirQuality(aq));
           } else {
             fallbackToDefault("Không thể lấy dữ liệu thời tiết cho vị trí của bạn.");
           }
@@ -379,6 +382,10 @@ export default function App() {
     else {
       setWeather(data);
       setCity(data.city);
+      // fetch aqi nếu có tọa độ
+      if (lat !== undefined && lon !== undefined) {
+        getAirQuality(lat, lon).then(aq => setAirQuality(aq));
+      }
     }
     setLoading(false);
   };
@@ -737,6 +744,58 @@ export default function App() {
             /* view bình thường */
             <div className={`weather-hero ${currentAnalysis.shouldGo}`}>
               <div className={`hero-glow ${currentAnalysis.shouldGo}`} />
+
+              {/* hiệu ứng thời tiết động */}
+              <div className={`weather-fx weather-${activeHour.weather.main.toLowerCase()}`}>
+                {(activeHour.weather.main === 'Rain' || activeHour.weather.main === 'Drizzle') && (
+                  <div className="rain-container">
+                    {Array.from({ length: activeHour.weather.main === 'Rain' ? 40 : 15 }).map((_, i) => (
+                      <div key={i} className="raindrop" style={{
+                        left: `${Math.random() * 100}%`,
+                        animationDuration: `${0.5 + Math.random() * 0.5}s`,
+                        animationDelay: `${Math.random() * 2}s`,
+                        opacity: 0.3 + Math.random() * 0.5,
+                      }} />
+                    ))}
+                  </div>
+                )}
+                {activeHour.weather.main === 'Thunderstorm' && (
+                  <>
+                    <div className="rain-container">
+                      {Array.from({ length: 50 }).map((_, i) => (
+                        <div key={i} className="raindrop heavy" style={{
+                          left: `${Math.random() * 100}%`,
+                          animationDuration: `${0.3 + Math.random() * 0.3}s`,
+                          animationDelay: `${Math.random() * 1.5}s`,
+                          opacity: 0.4 + Math.random() * 0.5,
+                        }} />
+                      ))}
+                    </div>
+                    <div className="lightning-layer" />
+                  </>
+                )}
+                {activeHour.weather.main === 'Clouds' && (
+                  <div className="clouds-container">
+                    <div className="cloud cloud-1" />
+                    <div className="cloud cloud-2" />
+                    <div className="cloud cloud-3" />
+                  </div>
+                )}
+                {activeHour.weather.main === 'Clear' && (
+                  <div className="sun-container">
+                    <div className="sun-glow" />
+                    <div className="sun-rays" />
+                  </div>
+                )}
+                {activeHour.weather.main === 'Fog' && (
+                  <div className="fog-container">
+                    <div className="fog-layer fog-1" />
+                    <div className="fog-layer fog-2" />
+                    <div className="fog-layer fog-3" />
+                  </div>
+                )}
+              </div>
+
               <div className="hero-animated-content" key={activeHour.dt}>
                 <div className="hero-visual">
                   <span className="big-weather-emoji">{getWeatherEmoji(activeHour.weather.main)}</span>
@@ -753,6 +812,15 @@ export default function App() {
                   <div className="hero-stat-chip"><Wind size={13} /><span>{Math.round(activeHour.wind_speed)} km/h</span></div>
                   <div className="hero-stat-chip"><Droplets size={13} /><span>{activeHour.humidity}%</span></div>
                   <div className="hero-stat-chip"><span>🌧️ {Math.round(activeHour.pop * 100)}%</span></div>
+                  {airQuality && (() => {
+                    const info = getAqiInfo(airQuality.aqi);
+                    return (
+                      <div className={`hero-stat-chip aqi-chip ${info.className}`} title={`AQI ${airQuality.aqi} - ${info.advice} | PM2.5: ${airQuality.pm25}μg/m³ | PM10: ${airQuality.pm10}μg/m³`}>
+                        <span className="aqi-dot" style={{ background: info.color }} />
+                        <span>AQI {airQuality.aqi}</span>
+                      </div>
+                    );
+                  })()}
                 </div>
                 <div className="hero-decision">
                   <div className="decision-icon">
